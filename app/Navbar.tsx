@@ -20,7 +20,7 @@ const Navbar = () => {
                 <Link href="/">Dashboard</Link>
             </li>
             <li className={`transition-colors ${activePath === '/issues' ? 'text-black' : 'text-zinc-500 hover:text-black'}`}>
-                <Link href="/issues">Issues</Link>
+                <Link href="/issues/list">Issues</Link>
             </li>
         </ul>
     </nav>

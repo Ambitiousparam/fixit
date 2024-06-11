@@ -1,10 +1,9 @@
+import { Container, Theme } from "@radix-ui/themes";
+import '@radix-ui/themes/styles.css';
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Navbar from "./Navbar";
-import '@radix-ui/themes/styles.css';
 import "./globals.css";
-import { Container, Theme, ThemePanel } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
+import Navbar from "./Navbar";
 
 
 
