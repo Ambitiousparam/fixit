@@ -1,71 +1,99 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+import classnames from "classnames";
+import { useSession } from "next-auth/react";
+import Skeleton from "@/app/components/Skeleton"
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 import { TbError404 } from "react-icons/tb";
-import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { Avatar, Box, Container, DropdownMenu, DropdownMenuContent, Flex, Text } from '@radix-ui/themes';
 
 const Navbar = () => {
-  const currentpath = usePathname();
-   const {status,data:session} =  useSession();
   
-  const [activePath, setActivePath] = useState(currentpath);
-
-  useEffect(() => {
-    setActivePath(currentpath);
-  }, [currentpath]);
 
   return (
     <nav className='border-b mb-5 px-5 py-3'>
       <Container>
-
-      
-    
     <Flex justify="between">
       <Flex align="center" gap="3">
         <Link href="/"><TbError404 /></Link>
-        <ul className='flex space-x-6 '>
-            <li className={`transition-colors ${activePath === '/' ? 'text-black' : 'text-zinc-500 hover:text-black'}`}>
-                <Link href="/">Dashboard</Link>
-            </li>
-            <li className={`transition-colors ${activePath === '/issues' ? 'text-black' : 'text-zinc-500 hover:text-black'}`}>
-                <Link href="/issues/list">Issues</Link>
-            </li>
-        </ul>
+        <NavLinks/>
       </Flex>
-      <Box>
-          {status ==='authenticated' && (
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <Avatar className='cursor-pointer' radius='full'  size="2"   src ={session.user!.image!} fallback="?"/>
-
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Label >
-                  <Text size="2">
-                  {session.user?.email}
-                  </Text>
-                </DropdownMenu.Label>
-                <DropdownMenu.Item>
-              <Link href = "/api/auth/signout">Sign out</Link>
-
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-          
-          
-          )}
-          {status ==='unauthenticated' &&(
-
-            <Link href="/api/auth/signin">Login</Link>
-          )}
-      </Box>
+      <AuthStatus/>
+      
     </Flex>
     </Container>
 
     </nav>
   );  
+};
+
+const NavLinks = () => {
+  const currentPath = usePathname();
+
+  const links = [
+    { label: "Dashboard", href: "/" },
+    { label: "Issues", href: "/issues/list" },
+  ];
+
+  return (
+    <ul className="flex space-x-6">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            className={classnames({
+              "nav-link": true,
+              "!text-zinc-900": link.href === currentPath,
+            })}
+            href={link.href}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const AuthStatus = () => {
+  
+  const { status, data: session } = useSession();
+
+  if (status === "loading") return <Skeleton width="3rem"/>;
+
+  if (status === "unauthenticated")
+    return <Link className="nav-link" href="/api/auth/signin">Login</Link>;
+
+  return (
+    <Box>
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Avatar
+            src={session!.user!.image!}
+            fallback="?"
+            size="2"
+            radius="full"
+            className="cursor-pointer"
+          />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <DropdownMenu.Label>
+            <Text size="2">{session!.user!.email}</Text>
+          </DropdownMenu.Label>
+          <DropdownMenu.Item>
+            <Link href="/api/auth/signout">Log out</Link>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </Box>
+  );
 };
 
 export default Navbar;
