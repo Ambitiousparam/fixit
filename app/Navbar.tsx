@@ -3,9 +3,13 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { TbError404 } from "react-icons/tb";
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { Box } from '@radix-ui/themes';
 
 const Navbar = () => {
   const currentpath = usePathname();
+   const {status,data:session} =  useSession();
+  
   const [activePath, setActivePath] = useState(currentpath);
 
   useEffect(() => {
@@ -23,6 +27,19 @@ const Navbar = () => {
                 <Link href="/issues/list">Issues</Link>
             </li>
         </ul>
+
+        <Box>
+          {status ==='authenticated' && 
+
+          (<Link href = "/api/auth/signout">Sign out</Link>
+          
+          )}
+          {status ==='unauthenticated' &&(
+
+            <Link href="/api/auth/signin">Login</Link>
+          )}
+          
+        </Box>
     </nav>
   );
 };
