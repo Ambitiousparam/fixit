@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import Authprovider from "./auth/provider";
+import QueryClientProvider from "./QueryClientProvider";
 
 
 
@@ -24,6 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.variable}>
+
+        <QueryClientProvider>
+
         <Authprovider>
 
       <Theme appearance="light" accentColor="iris" panelBackground="solid" radius="large">
@@ -33,6 +37,8 @@ export default function RootLayout({
         </main>
         </Theme>
         </Authprovider>
+
+        </QueryClientProvider>
         </body>
     </html>
   );
