@@ -54,6 +54,7 @@ const IssueForm = ({ issue }: { issue?: Issue } ) => {
       )}
       <form className="space-y-3" onSubmit={onSubmit}>
         <TextField.Root>
+          {/*@ts-ignore*/}
           <TextField.Input defaultValue={issue?.title} placeholder="Title" {...register('title')} />
         </TextField.Root>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
