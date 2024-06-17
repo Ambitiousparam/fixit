@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Button, Flex } from "@radix-ui/themes";
 import React from "react";
@@ -9,6 +9,7 @@ import {
   DoubleArrowLeftIcon,
   DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
+
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
